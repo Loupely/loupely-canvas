@@ -22,7 +22,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // CHANGE THESE TWO LINES to your GitHub owner and repository name.
-if ( ! defined( 'LC_GH_OWNER' ) ) define( 'LC_GH_OWNER', 'joyceakiko' );
+if ( ! defined( 'LC_GH_OWNER' ) ) define( 'LC_GH_OWNER', 'Loupely' );
 if ( ! defined( 'LC_GH_REPO' ) )  define( 'LC_GH_REPO', 'loupely-canvas' );
 
 

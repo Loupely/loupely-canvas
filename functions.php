@@ -15,7 +15,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'LC_VERSION', '2.2.5' );
+define( 'LC_VERSION', '2.2.9' );
 
 
 // ===========================================================
@@ -81,3 +81,4 @@ require get_template_directory() . '/inc/page-meta.php';
 require get_template_directory() . '/inc/starter-content.php';
 require get_template_directory() . '/inc/editor-tools.php';
 require get_template_directory() . '/inc/updater.php';
+require get_template_directory() . '/inc/pro-panel.php';

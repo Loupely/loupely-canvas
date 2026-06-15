@@ -101,6 +101,8 @@ function lc_render_settings_page() {
             </div>
         <?php endif; ?>
 
+        <?php do_action( 'lc_settings_top' ); ?>
+
         <p style="max-width:720px;color:#50575e;">
             <?php echo esc_html__( 'Paste raw HTML into any box below. The header and footer wrap every page. The head and body code run site wide. Tip: click into any box and press Ctrl+F or Cmd+F to find and replace inside it.', 'loupely-canvas' ); ?>
         </p>

@@ -3,7 +3,7 @@ Contributors: loupely
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 2.2.5
+Stable tag: 2.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, full-width-template, translation-ready, custom-colors, editor-style
@@ -52,11 +52,14 @@ This full edition is distributed through GitHub and loupelycanvas.com. It includ
 
 == Changelog ==
 
-= 2.2.5 =
-* Find and replace now highlights matches with a visible overlay that stays in place no matter where the cursor is, so the current match is always clear.
-* Pressing Enter in a code box after a search inserts a newline normally and no longer replaces the highlighted match.
-* Replacements are undoable. Plain boxes (theme settings, per page boxes, classic editor) use the browser's own undo and redo. In the block editor, where its history does not reliably record edits made from outside, the find and replace tool keeps its own undo and redo for the replacements it makes.
-* Added a hint showing how to jump to the next match from inside the editor (F3, or Cmd+G on Mac).
+= 2.2.9 =
+* Added a Starter Kit panel at the top of the settings screen, linking to the free kit at loupelycanvas.com/starter-kit. Admin only, nothing is added to the front end.
+* Updated the Theme URI, Author URI, and translation bug report URL to loupelycanvas.com.
+* Pointed the bundled update checker at the Loupely organization repository.
+
+= 2.2.1 - 2.2.5 =
+* Fixed find and replace so Replace All works across the whole HTML box.
+* Fixed the undo hotkey so it reverts a replace or replace all made with find and replace.
 
 = 2.2.0 =
 * Added a GitHub based update checker so self-hosted installs receive update notices in wp-admin and can update in one click, without the WordPress.org directory.
