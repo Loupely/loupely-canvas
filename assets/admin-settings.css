@@ -152,3 +152,74 @@ html:has(body.appearance_page_lc-header-footer-html) {
         scroll-margin-top: 112px;
     }
 }
+
+/* ---- Site basics panel (logo, favicon, menus) ---- */
+
+.lc-canvas-settings .lc-site-basics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    max-width: 720px;
+    margin: 14px 0 8px;
+}
+
+.lc-canvas-settings .lc-basic {
+    flex: 1 1 200px;
+    background: #fff;
+    border: 1px solid #D5DED6;
+    border-radius: 6px;
+    padding: 16px 18px;
+}
+
+.lc-canvas-settings .lc-basic h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #1A2420;
+}
+
+.lc-canvas-settings .lc-basic__preview {
+    margin: 0 0 10px;
+}
+
+.lc-canvas-settings .lc-basic__preview img {
+    max-width: 120px;
+    height: auto;
+    border: 1px solid #D5DED6;
+    border-radius: 4px;
+    background: #F5F7F5;
+}
+
+.lc-canvas-settings .lc-basic__status {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: #4A5E52;
+}
+
+.lc-canvas-settings .lc-basic__status--empty {
+    color: #7A9087;
+}
+
+.lc-canvas-settings .lc-basic__help {
+    margin: 0 0 12px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #4A5E52;
+}
+
+.lc-canvas-settings .lc-basic__btn {
+    display: inline-block;
+    background: #7A9E87;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    padding: 9px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.lc-canvas-settings .lc-basic__btn:hover,
+.lc-canvas-settings .lc-basic__btn:focus {
+    background: #5C7F68;
+    color: #fff;
+}

@@ -3,7 +3,7 @@ Contributors: loupely
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 2.8.0
+Stable tag: 2.10.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, full-width-template, translation-ready, custom-colors, editor-style
@@ -53,9 +53,28 @@ This full edition is distributed through GitHub and loupelycanvas.com. It includ
 
 == Changelog ==
 
+= 2.10.0 =
+* Added a Site basics section to the settings screen that gathers the logo, the favicon, and the menus in one place, with the current state shown and a link straight to each control. The logo and favicon are stored by WordPress, so they stay in sync with the Customizer.
+* Added logo support and a {logo} token for the header and footer, so you can place the site logo without hardcoding an image tag. It renders with the class custom-logo, yours to size with CSS.
+* The favicon is printed by WordPress once set, with no code or token needed.
+
+= 2.9.0 =
+* The header and footer boxes now accept tokens. {site_title}, {tagline}, {home_url}, and {year} fill in site values, so a footer copyright line can read the current year on its own.
+* Added navigation menu tokens for the header and footer. {menu:header} and {menu:footer} render the menus assigned to the new Header and Footer locations under Appearance, Menus, and {menu:a-menu-slug} renders any menu by its slug or name. A menu prints as a plain ul with the class lc-menu, which you style from your Head code box.
+* The settings screen lists the new tokens under the Header and Footer boxes.
+
+= 2.8.1 =
+* Added a {search_form} token for the Archive header and 404 boxes, so you can drop a search box into either one.
+* The search results page now shows a search form when nothing matched, so a visitor can try again without leaving the page.
+
 = 2.8.0 =
-* Coming from Loupely Canvas Lite is easier. The full theme now finds the header and footer you saved in Lite and offers a one click import on the Themes screen and the Loupely Canvas settings screen. Your posts and pages already carry over on their own.
-* New "Load a starter blog layout" button in the Blog templates section fills the Post card and Single post boxes with editable example markup, so your blog has a structure to build on instead of the bare default. Both actions only ever fill empty boxes, so nothing you already set is touched.
+* Added blog tokens for richer post cards and single posts. {post_class} outputs the post's own CSS classes, so a card can be styled by category, tag, or sticky state. {comment_count} and {comments_link} show the number of comments and link to them. {author_avatar}, {author_bio}, and {author_url} pull author details from the profile.
+* The settings token reference and the Post card and Single post token lists now include the new tokens.
+
+= 2.7.2 =
+* Reply links on threaded comments now work. The core comment reply script loads on single posts when threaded comments are turned on, so a Reply moves the form under the comment it answers.
+* Added responsive embeds support, so a video or other embed inside a post scales to its container instead of overflowing.
+* Added the pingback link in the head on single posts that accept pings, so other sites can register a pingback.
 
 = 2.7.1 =
 * Single posts split with the Page Break block now show within-post page links, matching the Lite theme. Single-page posts are unaffected.

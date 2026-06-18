@@ -170,6 +170,7 @@ function lc_render_settings_page() {
 
             <nav class="lc-settings-nav" aria-label="<?php echo esc_attr__( 'Jump to a settings section', 'loupely-canvas' ); ?>">
                 <span class="lc-nav-label">&lt;jump-to&gt;</span>
+                <a href="#lc-sec-site-basics"><?php echo esc_html__( 'Site basics', 'loupely-canvas' ); ?></a>
                 <a href="#lc-sec-header"><?php echo esc_html__( 'Header', 'loupely-canvas' ); ?></a>
                 <a href="#lc-sec-footer"><?php echo esc_html__( 'Footer', 'loupely-canvas' ); ?></a>
                 <a href="#lc-sec-head"><?php echo esc_html__( 'Head code', 'loupely-canvas' ); ?></a>
@@ -186,17 +187,23 @@ function lc_render_settings_page() {
             </nav>
 
             <?php
+            if ( function_exists( 'lc_render_site_basics' ) ) {
+                lc_render_site_basics();
+            }
+
             lc_render_box(
                 'lc_header_html',
                 __( 'Header HTML', 'loupely-canvas' ),
-                __( 'Printed at the top of every page, before your page content.', 'loupely-canvas' ),
-                'lc-sec-header'
+                __( 'Printed at the top of every page, before your page content. It accepts the tokens below. For {menu:header}, build a menu under Appearance, Menus and assign it to the Header location.', 'loupely-canvas' ),
+                'lc-sec-header',
+                __( 'Tokens: {logo} {site_title} {tagline} {home_url} {year} {menu:header} and {menu:your-menu-slug}', 'loupely-canvas' )
             );
             lc_render_box(
                 'lc_footer_html',
                 __( 'Footer HTML', 'loupely-canvas' ),
-                __( 'Printed at the bottom of every page, after your page content.', 'loupely-canvas' ),
-                'lc-sec-footer'
+                __( 'Printed at the bottom of every page, after your page content. It accepts the tokens below. For {menu:footer}, build a menu under Appearance, Menus and assign it to the Footer location.', 'loupely-canvas' ),
+                'lc-sec-footer',
+                __( 'Tokens: {logo} {site_title} {tagline} {home_url} {year} {menu:footer} and {menu:your-menu-slug}', 'loupely-canvas' )
             );
             lc_render_box(
                 'lc_head_html',
@@ -242,26 +249,28 @@ function lc_render_settings_page() {
                         <li><?php echo esc_html__( '{thumbnail}: the featured image as a ready img tag', 'loupely-canvas' ); ?></li>
                         <li><?php echo esc_html__( '{thumbnail_url}: just the featured image URL (use in src or CSS)', 'loupely-canvas' ); ?></li>
                         <li><?php echo esc_html__( '{author}: the author name', 'loupely-canvas' ); ?></li>
+                        <li><?php echo esc_html__( '{author_avatar}: the author photo as a ready img tag', 'loupely-canvas' ); ?></li>
+                        <li><?php echo esc_html__( '{author_bio}: the author bio from their profile', 'loupely-canvas' ); ?></li>
+                        <li><?php echo esc_html__( '{author_url}: the author website link (use in an href)', 'loupely-canvas' ); ?></li>
                         <li><?php echo esc_html__( '{categories}: linked category names', 'loupely-canvas' ); ?></li>
                         <li><?php echo esc_html__( '{tags}: linked tag names', 'loupely-canvas' ); ?></li>
+                        <li><?php echo esc_html__( '{post_class}: the post CSS classes (put in a class attribute on your wrapper)', 'loupely-canvas' ); ?></li>
+                        <li><?php echo esc_html__( '{comment_count}: the number of comments', 'loupely-canvas' ); ?></li>
+                        <li><?php echo esc_html__( '{comments_link}: the link to the comments (use in an href)', 'loupely-canvas' ); ?></li>
                     </ul>
                     <p style="margin:8px 0 4px;font-weight:600;color:#1a2420;"><?php echo esc_html__( 'In Archive header:', 'loupely-canvas' ); ?></p>
                     <ul style="list-style:disc;margin:0 0 8px 22px;font-family:Menlo,Consolas,monospace;font-size:12px;line-height:1.9;">
                         <li><?php echo esc_html__( '{archive_title}: the archive name, for example a category', 'loupely-canvas' ); ?></li>
                         <li><?php echo esc_html__( '{archive_description}: the archive description, if set', 'loupely-canvas' ); ?></li>
+                        <li><?php echo esc_html__( '{search_form}: a ready search box (also works in the 404 box)', 'loupely-canvas' ); ?></li>
                     </ul>
                     <p style="margin:8px 0 4px;font-weight:600;color:#1a2420;"><?php echo esc_html__( 'In the 404 box:', 'loupely-canvas' ); ?></p>
                     <ul style="list-style:disc;margin:0 0 4px 22px;font-family:Menlo,Consolas,monospace;font-size:12px;line-height:1.9;">
                         <li><?php echo esc_html__( '{home_url}: your homepage link', 'loupely-canvas' ); ?></li>
+                        <li><?php echo esc_html__( '{search_form}: a ready search box', 'loupely-canvas' ); ?></li>
                     </ul>
                 </div>
             </details>
-
-            <?php
-            if ( function_exists( 'lc_render_blog_starter_button' ) ) {
-                lc_render_blog_starter_button();
-            }
-            ?>
 
             <?php
             lc_render_box(
@@ -269,28 +278,28 @@ function lc_render_settings_page() {
                 __( 'Post card', 'loupely-canvas' ),
                 __( 'Shown for each post in a list: your blog page and the category, tag, and date archives. Keep it compact, link the title to {permalink}, and use {excerpt} rather than {content}.', 'loupely-canvas' ),
                 'lc-sec-post-card',
-                __( 'Tokens: {title} {permalink} {date} {excerpt} {thumbnail} {thumbnail_url} {author} {categories} {tags}', 'loupely-canvas' )
+                __( 'Tokens: {title} {permalink} {date} {excerpt} {thumbnail} {thumbnail_url} {author} {author_avatar} {author_bio} {author_url} {categories} {tags} {post_class} {comment_count} {comments_link}', 'loupely-canvas' )
             );
             lc_render_box(
                 'lc_single_post_html',
                 __( 'Single post', 'loupely-canvas' ),
                 __( 'Shown when someone opens one post on its own page. This is the full read, so use {content} for the body.', 'loupely-canvas' ),
                 'lc-sec-single-post',
-                __( 'Tokens: {title} {permalink} {date} {content} {thumbnail} {thumbnail_url} {author} {categories} {tags}', 'loupely-canvas' )
+                __( 'Tokens: {title} {permalink} {date} {content} {thumbnail} {thumbnail_url} {author} {author_avatar} {author_bio} {author_url} {categories} {tags} {post_class} {comment_count} {comments_link}', 'loupely-canvas' )
             );
             lc_render_box(
                 'lc_archive_header_html',
                 __( 'Archive header', 'loupely-canvas' ),
                 __( 'Optional heading above a list on archive and search pages. Leave it empty for a plain title on archives, and nothing on the blog page.', 'loupely-canvas' ),
                 'lc-sec-archive-header',
-                __( 'Tokens: {archive_title} {archive_description}', 'loupely-canvas' )
+                __( 'Tokens: {archive_title} {archive_description} {search_form}', 'loupely-canvas' )
             );
             lc_render_box(
                 'lc_error_404_html',
                 __( '404 page', 'loupely-canvas' ),
                 __( 'Shown when a URL is not found. Empty falls back to a short message with a link home.', 'loupely-canvas' ),
                 'lc-sec-404',
-                __( 'Tokens: {home_url}', 'loupely-canvas' )
+                __( 'Tokens: {home_url} {search_form}', 'loupely-canvas' )
             );
             ?>
 

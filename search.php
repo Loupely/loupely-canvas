@@ -3,8 +3,8 @@
 <main class="lc-content">
 <?php
 /**
- * Search results. Same post list as archives, with a no-results line when
- * nothing matched.
+ * Search results. Same post list as archives. When nothing matched, a short
+ * message and a search form, so a visitor can try again without leaving.
  */
 lc_render_archive_header( true );
 
@@ -15,7 +15,8 @@ if ( have_posts() ) :
     endwhile;
     lc_render_pagination();
 else :
-    echo '<p class="lc-no-results">' . esc_html__( 'Nothing matched your search.', 'loupely-canvas' ) . '</p>';
+    echo '<p class="lc-no-results">' . esc_html__( 'Nothing matched your search. Try different words.', 'loupely-canvas' ) . '</p>';
+    echo lc_search_form();
 endif;
 ?>
 </main>

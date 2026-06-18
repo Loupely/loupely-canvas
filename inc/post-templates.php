@@ -15,11 +15,13 @@
  *
  * Per-post tokens (post card and single post boxes):
  *   {title} {permalink} {date} {content} {excerpt}
- *   {thumbnail} {thumbnail_url} {author} {categories} {tags}
+ *   {thumbnail} {thumbnail_url} {author} {author_avatar} {author_bio}
+ *   {author_url} {categories} {tags} {post_class}
+ *   {comment_count} {comments_link}
  * Page-level tokens (archive header box):
- *   {archive_title} {archive_description}
+ *   {archive_title} {archive_description} {search_form}
  * 404 box:
- *   {home_url}
+ *   {home_url} {search_form}
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -45,6 +47,16 @@ function lc_apply_post_tokens( string $template ): string {
         $tags = '';
     }
 
+    $author_id     = (int) get_the_author_meta( 'ID' );
+    $author_avatar = (string) get_avatar( $author_id, 96 );
+    $author_bio    = wp_kses_post( (string) get_the_author_meta( 'description' ) );
+    $author_url    = (string) get_the_author_meta( 'url' );
+
+    $post_class = esc_attr( implode( ' ', get_post_class( '', $id ) ) );
+
+    $comment_count = (int) get_comments_number( $id );
+    $comments_link = (string) get_comments_link( $id );
+
     $replacements = [
         '{title}'         => esc_html( get_the_title( $id ) ),
         '{permalink}'     => esc_url( get_permalink( $id ) ),
@@ -54,8 +66,14 @@ function lc_apply_post_tokens( string $template ): string {
         '{thumbnail}'     => $thumbnail,
         '{thumbnail_url}' => esc_url( $thumbnail_url ),
         '{author}'        => esc_html( get_the_author() ),
+        '{author_avatar}' => $author_avatar,
+        '{author_bio}'    => $author_bio,
+        '{author_url}'    => esc_url( $author_url ),
         '{categories}'    => (string) $categories,
         '{tags}'          => (string) $tags,
+        '{post_class}'    => $post_class,
+        '{comment_count}' => esc_html( (string) $comment_count ),
+        '{comments_link}' => esc_url( $comments_link ),
     ];
 
     return strtr( $template, $replacements );
@@ -167,6 +185,7 @@ function lc_render_archive_header( bool $allow_default = false ): void {
     echo strtr( $tpl, [
         '{archive_title}'       => $title,
         '{archive_description}' => $desc,
+        '{search_form}'         => lc_search_form(),
     ] );
 }
 
@@ -222,5 +241,18 @@ function lc_render_404(): void {
             . '<p><a href="{home_url}">' . esc_html__( 'Go to the homepage', 'loupely-canvas' ) . '</a></p>'
             . '</section>';
     }
-    echo strtr( $tpl, [ '{home_url}' => esc_url( home_url( '/' ) ) ] );
+    echo strtr( $tpl, [
+        '{home_url}'    => esc_url( home_url( '/' ) ),
+        '{search_form}' => lc_search_form(),
+    ] );
+}
+
+
+/**
+ * Return the site search form markup, for the {search_form} token and the
+ * no-results search page. This is the core search form, which the theme opts
+ * into as HTML5 markup, so you style it from the Head code box like the rest.
+ */
+function lc_search_form(): string {
+    return (string) get_search_form( [ 'echo' => false ] );
 }

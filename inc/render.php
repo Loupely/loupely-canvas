@@ -11,6 +11,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 /**
+ * Apply the header and footer tokens when that feature is loaded, and return
+ * the HTML unchanged when it is not, so the header and footer still render if
+ * the tokens module is removed from the loader.
+ */
+function lc_filter_global_html( string $html ): string {
+    return function_exists( 'lc_apply_global_tokens' ) ? lc_apply_global_tokens( $html ) : $html;
+}
+
+
+/**
  * Render the site header.
  *
  * Order of precedence:
@@ -28,7 +38,7 @@ function lc_render_header(): void {
         if ( $mode === 'custom' ) {
             $custom = get_post_meta( $obj->ID, '_lc_header_custom', true );
             if ( trim( (string) $custom ) !== '' ) {
-                echo $custom;
+                echo lc_filter_global_html( (string) $custom );
                 return;
             }
         }
@@ -36,7 +46,7 @@ function lc_render_header(): void {
 
     $html = get_option( 'lc_header_html', '' );
     if ( trim( (string) $html ) !== '' ) {
-        echo $html;
+        echo lc_filter_global_html( (string) $html );
         return;
     }
 
@@ -57,7 +67,7 @@ function lc_render_footer(): void {
         if ( $mode === 'custom' ) {
             $custom = get_post_meta( $obj->ID, '_lc_footer_custom', true );
             if ( trim( (string) $custom ) !== '' ) {
-                echo $custom;
+                echo lc_filter_global_html( (string) $custom );
                 return;
             }
         }
@@ -65,7 +75,7 @@ function lc_render_footer(): void {
 
     $html = get_option( 'lc_footer_html', '' );
     if ( trim( (string) $html ) !== '' ) {
-        echo $html;
+        echo lc_filter_global_html( (string) $html );
         return;
     }
 
@@ -81,7 +91,7 @@ function lc_render_page_by_slug( string $slug ): void {
     if ( ! $page || $page->post_status !== 'publish' ) {
         return;
     }
-    echo apply_filters( 'the_content', $page->post_content );
+    echo lc_filter_global_html( (string) apply_filters( 'the_content', $page->post_content ) );
 }
 
 
