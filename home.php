@@ -19,7 +19,9 @@ $lc_unwrap = function_exists( 'lc_page_is_unwrapped' ) && lc_page_is_unwrapped()
 <?php if ( ! $lc_unwrap ) : ?><main class="lc-content"><?php endif; ?>
 <?php
 lc_render_posts_page_intro();
-lc_render_archive_header( false );
+if ( ! function_exists( 'lc_hide_archive_header' ) || ! lc_hide_archive_header() ) {
+	lc_render_archive_header( false );
+}
 
 if ( have_posts() ) :
     while ( have_posts() ) :

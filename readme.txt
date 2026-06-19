@@ -3,7 +3,7 @@ Contributors: loupely
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 2.11.2
+Stable tag: 2.11.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, full-width-template, translation-ready, custom-colors, editor-style
@@ -53,6 +53,9 @@ From Appearance, Loupely Canvas. A single page can override them under the Heade
 This full edition is distributed through GitHub and loupelycanvas.com. It includes a built in update checker that watches the project's GitHub releases, so update notices appear in wp-admin and you can update in one click. The Loupely Canvas Lite edition on WordPress.org updates through the directory instead.
 
 == Changelog ==
+
+= 2.11.3 =
+* Added a per page Hide the archive header option. It shows when you edit the page assigned as your Posts page, and turns off the archive header on the blog index so only the content above the post list shows there.
 
 = 2.11.2 =
 * Per page settings now apply on the blog index when a static Posts page is assigned. The Posts page is the home query, not a singular page, so its per page head code, body end code, noindex, body class, full width, and skip-global setting were not taking effect there. They now read from the assigned Posts page. True archives like category, tag, and search still have no single page to attach settings to, so they stay untouched.

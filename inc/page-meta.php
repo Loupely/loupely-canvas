@@ -46,6 +46,7 @@ function lc_page_settings_keys(): array {
 		'unwrap'         => '_lc_unwrap',
 		'noindex'        => '_lc_noindex',
 		'disable_global' => '_lc_disable_global',
+		'hide_archive_header' => '_lc_hide_archive_header',
 		'body_class'     => '_lc_body_class',
 		'page_head'      => '_lc_page_head',
 		'page_body_end'  => '_lc_page_body_end',
@@ -103,6 +104,8 @@ function lc_page_settings_render( $post ) {
 	$unwrap     = get_post_meta( $id, '_lc_unwrap', true ) === '1';
 	$noindex    = get_post_meta( $id, '_lc_noindex', true ) === '1';
 	$disable    = get_post_meta( $id, '_lc_disable_global', true ) === '1';
+	$hide_arch  = get_post_meta( $id, '_lc_hide_archive_header', true ) === '1';
+	$is_posts_page = ( $id > 0 && $id === (int) get_option( 'page_for_posts' ) );
 	$body_class = get_post_meta( $id, '_lc_body_class', true );
 	$head_code  = get_post_meta( $id, '_lc_page_head', true );
 	$body_code  = get_post_meta( $id, '_lc_page_body_end', true );
@@ -162,6 +165,17 @@ function lc_page_settings_render( $post ) {
 		checked( $disable, true, false ),
 		esc_html__( 'Skip the site-wide head and body code on this page', 'loupely-canvas' )
 	);
+	if ( $is_posts_page ) {
+		printf(
+			'<label style="%1$s"><input type="checkbox" name="lc_hide_archive_header" value="1"%2$s> %3$s</label>',
+			esc_attr( $check_css ),
+			checked( $hide_arch, true, false ),
+			esc_html__( 'Hide the archive header on the blog page', 'loupely-canvas' )
+		);
+		echo '<p style="' . esc_attr( $help_css ) . 'margin:-3px 0 10px 22px;">'
+			. esc_html__( 'This is the page assigned as your Posts page. Turn this on to drop the archive header here, so only the content above the post list shows.', 'loupely-canvas' )
+			. '</p>';
+	}
 
 	// --- Body class ---
 	echo '<h4 style="' . esc_attr( $head_css ) . '">' . esc_html__( 'Body class', 'loupely-canvas' ) . '</h4>';
@@ -267,7 +281,7 @@ function lc_page_settings_save( int $post_id ) {
 	}
 
 	// Checkboxes: store '1' when checked, otherwise an empty string.
-	foreach ( [ 'hide_title', 'hide_post_nav', 'unwrap', 'noindex', 'disable_global' ] as $flag ) {
+	foreach ( [ 'hide_title', 'hide_post_nav', 'unwrap', 'noindex', 'disable_global', 'hide_archive_header' ] as $flag ) {
 		update_post_meta( $post_id, '_lc_' . $flag, empty( $_POST[ 'lc_' . $flag ] ) ? '' : '1' );
 	}
 
@@ -393,6 +407,16 @@ function lc_page_is_unwrapped(): bool {
 function lc_hide_post_nav(): bool {
 	$id = lc_singular_id();
 	return $id > 0 && get_post_meta( $id, '_lc_hide_post_nav', true ) === '1';
+}
+
+/**
+ * Whether the blog index should drop the archive header. Set on the page
+ * assigned as the Posts page, and read here on the blog index, where
+ * lc_settings_post_id() resolves to that page.
+ */
+function lc_hide_archive_header(): bool {
+	$id = lc_settings_post_id();
+	return $id > 0 && get_post_meta( $id, '_lc_hide_archive_header', true ) === '1';
 }
 
 /**
