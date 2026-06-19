@@ -99,6 +99,14 @@ function lc_page_settings_render( $post ) {
 	$h_custom = get_post_meta( $id, '_lc_header_custom', true );
 	$f_custom = get_post_meta( $id, '_lc_footer_custom', true );
 
+	/**
+	 * The effective mode shown in the control, without changing stored meta.
+	 * Canvas Pro uses this so a page that already carries a set assignment shows
+	 * the set option selected here.
+	 */
+	$h_mode = (string) apply_filters( 'lc_page_settings_effective_mode', $h_mode, 'header', $id );
+	$f_mode = (string) apply_filters( 'lc_page_settings_effective_mode', $f_mode, 'footer', $id );
+
 	$hide_title = get_post_meta( $id, '_lc_hide_title', true ) === '1';
 	$hide_nav   = get_post_meta( $id, '_lc_hide_post_nav', true ) === '1';
 	$unwrap     = get_post_meta( $id, '_lc_unwrap', true ) === '1';
@@ -120,8 +128,14 @@ function lc_page_settings_render( $post ) {
 		. '</p>';
 
 	// --- Header and footer overrides ---
-	lc_ps_header_footer_control( 'header', __( 'Header', 'loupely-canvas' ), $h_mode, $h_custom, $head_css, $area_css );
-	lc_ps_header_footer_control( 'footer', __( 'Footer', 'loupely-canvas' ), $f_mode, $f_custom, $head_css, $area_css );
+	lc_ps_header_footer_control( 'header', __( 'Header', 'loupely-canvas' ), $h_mode, $h_custom, $head_css, $area_css, $id );
+	lc_ps_header_footer_control( 'footer', __( 'Footer', 'loupely-canvas' ), $f_mode, $f_custom, $head_css, $area_css, $id );
+
+	/**
+	 * After both header and footer controls. Canvas Pro uses this to note when an
+	 * assignment rule applies a set to this page.
+	 */
+	do_action( 'lc_page_settings_after_hf', $id );
 
 	// --- Page options (checkboxes) ---
 	echo '<h4 style="' . esc_attr( $head_css ) . '">' . esc_html__( 'Page options', 'loupely-canvas' ) . '</h4>';
@@ -218,7 +232,7 @@ function lc_page_settings_render( $post ) {
 /**
  * One header or footer override control: a mode select and its custom HTML box.
  */
-function lc_ps_header_footer_control( string $part, string $label, string $mode, string $custom, string $head_css, string $area_css ) {
+function lc_ps_header_footer_control( string $part, string $label, string $mode, string $custom, string $head_css, string $area_css, int $id = 0 ) {
 	$modes = [
 		'global' => __( 'Use the global header and footer', 'loupely-canvas' ),
 		'custom' => __( 'Use custom HTML for this page', 'loupely-canvas' ),
@@ -233,22 +247,36 @@ function lc_ps_header_footer_control( string $part, string $label, string $mode,
 		$modes['none']   = __( 'Show no header on this page', 'loupely-canvas' );
 	}
 
+	/**
+	 * Header and footer modes beyond the three the theme ships. Canvas Pro adds
+	 * a saved set as a fourth choice through this filter. With nothing hooked,
+	 * the control offers only the theme's own modes.
+	 */
+	$modes = (array) apply_filters( 'lc_page_settings_hf_modes', $modes, $part );
+
 	$wrap_id = 'lc-' . $part . '-custom-wrap';
 
 	echo '<h4 style="' . esc_attr( $head_css ) . '">' . esc_html( $label ) . '</h4>';
-	printf( '<select name="lc_%s_mode" data-lc-target="%s">', esc_attr( $part ), esc_attr( $wrap_id ) );
+	printf( '<select name="lc_%1$s_mode" data-lc-part="%1$s">', esc_attr( $part ) );
 	foreach ( $modes as $val => $text ) {
 		printf( '<option value="%s"%s>%s</option>', esc_attr( $val ), selected( $mode, $val, false ), esc_html( $text ) );
 	}
 	echo '</select>';
 	printf(
-		'<div id="%1$s" style="margin-top:8px;%2$s"><textarea name="lc_%3$s_custom" class="lc-html-field" rows="6" spellcheck="false" style="%4$s">%5$s</textarea></div>',
+		'<div id="%1$s" data-lc-part="%2$s" data-lc-mode="custom" style="margin-top:8px;%3$s"><textarea name="lc_%2$s_custom" class="lc-html-field" rows="6" spellcheck="false" style="%4$s">%5$s</textarea></div>',
 		esc_attr( $wrap_id ),
-		$mode === 'custom' ? '' : 'display:none;',
 		esc_attr( $part ),
+		$mode === 'custom' ? '' : 'display:none;',
 		esc_attr( $area_css ),
 		esc_textarea( $custom )
 	);
+
+	/**
+	 * Extra controls for an added mode, like Canvas Pro's set picker. Fires after
+	 * the custom box, so an added control wrapped with data-lc-part and
+	 * data-lc-mode shows and hides alongside it from assets/page-meta.js.
+	 */
+	do_action( 'lc_page_settings_hf_extra', $part, $mode, $id );
 }
 
 
@@ -265,7 +293,7 @@ function lc_page_settings_save( int $post_id ) {
 	$can_html = current_user_can( 'unfiltered_html' );
 
 	// Header and footer mode plus custom HTML.
-	$allowed = [ 'global', 'custom', 'none' ];
+	$allowed = (array) apply_filters( 'lc_page_settings_modes', [ 'global', 'custom', 'none' ] );
 	foreach ( [ 'header', 'footer' ] as $part ) {
 		$mode = isset( $_POST[ 'lc_' . $part . '_mode' ] ) ? sanitize_key( $_POST[ 'lc_' . $part . '_mode' ] ) : 'global';
 		if ( ! in_array( $mode, $allowed, true ) ) {
@@ -301,6 +329,13 @@ function lc_page_settings_save( int $post_id ) {
 			update_post_meta( $post_id, '_lc_' . $code_field, wp_slash( $value ) );
 		}
 	}
+
+	/**
+	 * After the theme's own fields are stored. An extension that added a mode or
+	 * field, such as Canvas Pro's set picker, saves its meta here. Runs only from
+	 * a verified save, since the caller checks the nonce and capability first.
+	 */
+	do_action( 'lc_after_page_settings_save', $post_id, $can_html );
 }
 
 

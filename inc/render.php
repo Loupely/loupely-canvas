@@ -29,18 +29,31 @@ function lc_filter_global_html( string $html ): string {
  *   3. A published page with the slug site-header (legacy fallback)
  */
 function lc_render_header(): void {
-    $obj = get_queried_object();
-    if ( $obj instanceof WP_Post ) {
-        $mode = get_post_meta( $obj->ID, '_lc_header_mode', true );
+    $obj     = get_queried_object();
+    $post_id = $obj instanceof WP_Post ? (int) $obj->ID : 0;
+
+    if ( $post_id ) {
+        $mode = (string) get_post_meta( $post_id, '_lc_header_mode', true );
         if ( $mode === 'none' ) {
             return;
         }
         if ( $mode === 'custom' ) {
-            $custom = get_post_meta( $obj->ID, '_lc_header_custom', true );
+            $custom = get_post_meta( $post_id, '_lc_header_custom', true );
             if ( trim( (string) $custom ) !== '' ) {
                 echo lc_filter_global_html( (string) $custom );
                 return;
             }
+        }
+
+        // A mode the theme does not ship, such as a saved set, is supplied by an
+        // extension. A string return owns the header for this page (an empty
+        // string renders nothing); null falls through to the global header.
+        $ext = apply_filters( 'lc_render_header_html', null, $post_id, $mode );
+        if ( is_string( $ext ) ) {
+            if ( trim( $ext ) !== '' ) {
+                echo lc_filter_global_html( $ext );
+            }
+            return;
         }
     }
 
@@ -58,18 +71,31 @@ function lc_render_header(): void {
  * Render the site footer. Same precedence as the header.
  */
 function lc_render_footer(): void {
-    $obj = get_queried_object();
-    if ( $obj instanceof WP_Post ) {
-        $mode = get_post_meta( $obj->ID, '_lc_footer_mode', true );
+    $obj     = get_queried_object();
+    $post_id = $obj instanceof WP_Post ? (int) $obj->ID : 0;
+
+    if ( $post_id ) {
+        $mode = (string) get_post_meta( $post_id, '_lc_footer_mode', true );
         if ( $mode === 'none' ) {
             return;
         }
         if ( $mode === 'custom' ) {
-            $custom = get_post_meta( $obj->ID, '_lc_footer_custom', true );
+            $custom = get_post_meta( $post_id, '_lc_footer_custom', true );
             if ( trim( (string) $custom ) !== '' ) {
                 echo lc_filter_global_html( (string) $custom );
                 return;
             }
+        }
+
+        // A mode the theme does not ship, such as a saved set, is supplied by an
+        // extension. A string return owns the footer for this page (an empty
+        // string renders nothing); null falls through to the global footer.
+        $ext = apply_filters( 'lc_render_footer_html', null, $post_id, $mode );
+        if ( is_string( $ext ) ) {
+            if ( trim( $ext ) !== '' ) {
+                echo lc_filter_global_html( $ext );
+            }
+            return;
         }
     }
 

@@ -3,7 +3,7 @@ Contributors: loupely
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 2.11.3
+Stable tag: 2.12.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, full-width-template, translation-ready, custom-colors, editor-style
@@ -53,6 +53,10 @@ From Appearance, Loupely Canvas. A single page can override them under the Heade
 This full edition is distributed through GitHub and loupelycanvas.com. It includes a built in update checker that watches the project's GitHub releases, so update notices appear in wp-admin and you can update in one click. The Loupely Canvas Lite edition on WordPress.org updates through the directory instead.
 
 == Changelog ==
+
+= 2.12.0 =
+* The per page Header and footer controls can now offer modes beyond the built-in Global, Custom, and None, and the front end honors them. The render falls back to the global header and footer when nothing supplies the added mode, so the theme works the same on its own. Canvas Pro uses this to add a Use a set choice to each control.
+* The Page settings panel can now be mounted by another editor with no change to its markup or save, so the Canvas Pro page editor reaches the same per page settings as the classic editor.
 
 = 2.11.3 =
 * Added a per page Hide the archive header option. It shows when you edit the page assigned as your Posts page, and turns off the archive header on the blog index so only the content above the post list shows there.
