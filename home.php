@@ -1,6 +1,5 @@
 <?php get_header(); ?>
 
-<main class="lc-content">
 <?php
 /**
  * Blog index (the page assigned as Posts page under Settings, Reading).
@@ -11,7 +10,14 @@
  *   2. An optional archive header (suppressed by default on the index).
  *   3. The post list, each item from your Post card markup.
  *   4. Pagination.
+ *
+ * Per page settings read from the assigned Posts page apply here too. Full
+ * width drops the main.lc-content wrapper.
  */
+$lc_unwrap = function_exists( 'lc_page_is_unwrapped' ) && lc_page_is_unwrapped();
+?>
+<?php if ( ! $lc_unwrap ) : ?><main class="lc-content"><?php endif; ?>
+<?php
 lc_render_posts_page_intro();
 lc_render_archive_header( false );
 
@@ -23,6 +29,6 @@ if ( have_posts() ) :
     lc_render_pagination();
 endif;
 ?>
-</main>
+<?php if ( ! $lc_unwrap ) : ?></main><?php endif; ?>
 
 <?php get_footer(); ?>

@@ -57,8 +57,16 @@ function lc_apply_post_tokens( string $template ): string {
     $comment_count = (int) get_comments_number( $id );
     $comments_link = (string) get_comments_link( $id );
 
+    // Hide title (Page settings) blanks the title token on this post's own
+    // single view, so the title leaves the markup rather than rendering empty.
+    // It is scoped to the single view, so the post still shows its title in
+    // card lists and archives.
+    $hide_title = is_singular()
+        && (int) get_queried_object_id() === (int) $id
+        && get_post_meta( $id, '_lc_hide_title', true ) === '1';
+
     $replacements = [
-        '{title}'         => esc_html( get_the_title( $id ) ),
+        '{title}'         => $hide_title ? '' : esc_html( get_the_title( $id ) ),
         '{permalink}'     => esc_url( get_permalink( $id ) ),
         '{date}'          => esc_html( get_the_date( '', $id ) ),
         '{content}'       => apply_filters( 'the_content', get_the_content( null, false, $id ) ),

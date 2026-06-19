@@ -9,7 +9,7 @@
  *   inc/site-basics.php    Site basics panel: logo, favicon, and menus in one place
  *   inc/post-templates.php Blog passthrough: post card, single post, archive, search and 404
  *   inc/editor-preview.php Carries the Head code design into the editor preview
- *   inc/page-meta.php      Per page header and footer override controls
+ *   inc/page-meta.php      Per page settings: header and footer override, title, code, more
  *   inc/starter-content.php  One click example header, footer and page
  *   inc/editor-tools.php   Loads the find and replace tool in the editor and settings
  *
@@ -19,7 +19,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'LC_VERSION', '2.10.4' );
+define( 'LC_VERSION', '2.11.2' );
 
 
 // ===========================================================

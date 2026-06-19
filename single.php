@@ -1,6 +1,5 @@
 <?php get_header(); ?>
 
-<main class="lc-content">
 <?php
 /**
  * Single post. Renders your Single post markup, with tokens replaced, then
@@ -8,9 +7,13 @@
  * you style them with your own CSS in the Head code box, the same way you
  * style everything else.
  *
- * Per page header and footer overrides apply here too, since the override
- * meta box is registered for posts as well as pages.
+ * Per page settings apply here too, since the meta box is registered for
+ * posts as well as pages. Full width drops the main.lc-content wrapper.
  */
+$lc_unwrap = function_exists( 'lc_page_is_unwrapped' ) && lc_page_is_unwrapped();
+?>
+<?php if ( ! $lc_unwrap ) : ?><main class="lc-content"><?php endif; ?>
+<?php
 if ( have_posts() ) :
     while ( have_posts() ) :
         the_post();
@@ -23,10 +26,14 @@ if ( have_posts() ) :
             'after'  => '</nav>',
         ] );
 
-        the_post_navigation( [
-            'prev_text' => '%title',
-            'next_text' => '%title',
-        ] );
+        // Previous and next post links, unless this post hides them under
+        // Page settings. Style via .post-navigation.
+        if ( ! ( function_exists( 'lc_hide_post_nav' ) && lc_hide_post_nav() ) ) {
+            the_post_navigation( [
+                'prev_text' => '%title',
+                'next_text' => '%title',
+            ] );
+        }
 
         if ( comments_open() || get_comments_number() ) {
             comments_template();
@@ -34,6 +41,6 @@ if ( have_posts() ) :
     endwhile;
 endif;
 ?>
-</main>
+<?php if ( ! $lc_unwrap ) : ?></main><?php endif; ?>
 
 <?php get_footer(); ?>

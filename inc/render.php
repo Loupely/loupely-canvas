@@ -104,6 +104,11 @@ function lc_render_page_by_slug( string $slug ): void {
 // ===========================================================
 
 function lc_print_head_code(): void {
+    // A page can opt out of the site-wide head and body code under Page
+    // settings. Its own per page head code still prints, from page-meta.php.
+    if ( function_exists( 'lc_global_code_disabled' ) && lc_global_code_disabled() ) {
+        return;
+    }
     $code = get_option( 'lc_head_html', '' );
     if ( trim( (string) $code ) !== '' ) {
         echo "\n" . $code . "\n";
@@ -113,6 +118,9 @@ add_action( 'wp_head', 'lc_print_head_code', 99 );
 
 
 function lc_print_body_end_code(): void {
+    if ( function_exists( 'lc_global_code_disabled' ) && lc_global_code_disabled() ) {
+        return;
+    }
     $code = get_option( 'lc_body_end_html', '' );
     if ( trim( (string) $code ) !== '' ) {
         echo "\n" . $code . "\n";

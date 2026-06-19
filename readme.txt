@@ -3,7 +3,7 @@ Contributors: loupely
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 2.10.4
+Stable tag: 2.11.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, full-width-template, translation-ready, custom-colors, editor-style
@@ -20,6 +20,7 @@ What it does:
 * Lets you set a global header and footer once, applied to every page.
 * Injects head code (analytics, fonts, favicons, meta tags) and body end code (chat widgets, late scripts) site wide, without editing theme files.
 * Lets any single page override the header and footer, or hide them entirely.
+* Gives each page its own settings: hide the title, render full width with no wrapper, add a body class, set noindex, skip the site-wide head and body code, and add head or body end code for that page alone. The things you would otherwise hand-code on every page.
 * Renders posts, archives, and search through your own markup, using simple tokens, so the blog stays as passthrough as your pages.
 * Adds a find and replace bar to every HTML box. Press Ctrl+F or Cmd+F inside a box to search its contents, the thing the editor never let you do. It supports case sensitivity, whole word, and regular expressions.
 * Ships an optional one click example header, footer, and page so you are not staring at a blank box.
@@ -52,6 +53,18 @@ From Appearance, Loupely Canvas. A single page can override them under the Heade
 This full edition is distributed through GitHub and loupelycanvas.com. It includes a built in update checker that watches the project's GitHub releases, so update notices appear in wp-admin and you can update in one click. The Loupely Canvas Lite edition on WordPress.org updates through the directory instead.
 
 == Changelog ==
+
+= 2.11.2 =
+* Per page settings now apply on the blog index when a static Posts page is assigned. The Posts page is the home query, not a singular page, so its per page head code, body end code, noindex, body class, full width, and skip-global setting were not taking effect there. They now read from the assigned Posts page. True archives like category, tag, and search still have no single page to attach settings to, so they stay untouched.
+
+= 2.11.1 =
+* Hide title now removes the title rather than only adding a hook class. On a post it blanks the title token and hides the default .lc-post-title element, so checking the box hides the title on its own. On a page it adds the lc-hide-title body class, since the theme prints no page title to remove.
+* Added a per post option to hide the previous and next post links, for single posts that should show only your own markup.
+
+= 2.11.0 =
+* Added a Page settings meta box that gathers the per page controls a hand-coder would otherwise repeat by hand: hide the title (adds the lc-hide-title body class), render full width with no theme wrapper, set a noindex robots tag, skip the site-wide head and body code on this page, add a free body class, and add head and body end code for this page alone.
+* The per page head code prints after the site-wide Head box so it can build on or override it, and the body end code prints after the site-wide Body end box.
+* Folded the existing header and footer override into the same Page settings box. Code boxes carry the find and replace bar, and code-bearing fields are re-slashed on save so a backslash or a JS hex escape in head code is kept intact.
 
 = 2.10.4 =
 * Colored the Loupely Canvas Pro link in the Starter Kit panel to the Canvas sage palette, matching the other links on the settings screen. Moved the panel's styles from the render code into the settings stylesheet.
