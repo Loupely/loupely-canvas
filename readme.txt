@@ -3,7 +3,7 @@ Contributors: loupely
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 2.10.0
+Stable tag: 2.10.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, full-width-template, translation-ready, custom-colors, editor-style
@@ -52,6 +52,18 @@ From Appearance, Loupely Canvas. A single page can override them under the Heade
 This full edition is distributed through GitHub and loupelycanvas.com. It includes a built in update checker that watches the project's GitHub releases, so update notices appear in wp-admin and you can update in one click. The Loupely Canvas Lite edition on WordPress.org updates through the directory instead.
 
 == Changelog ==
+
+= 2.10.4 =
+* Colored the Loupely Canvas Pro link in the Starter Kit panel to the Canvas sage palette, matching the other links on the settings screen. Moved the panel's styles from the render code into the settings stylesheet.
+
+= 2.10.3 =
+* Colored the Starter Kit link in the example helper to the Canvas sage palette, so it matches the sage Starter Kit button in the panel above instead of the default blue.
+
+= 2.10.2 =
+* In the example helper, linked the words Starter Kit to the configurator page on the website and removed the word above, so the reference reads as a link rather than a position on the screen.
+
+= 2.10.1 =
+* Reworded the example helper on the settings screen so it explains that it loads a sample header, footer, and page draft into the empty boxes, and sets it apart from the Starter Kit configurator on the website. Restyled it to the Canvas sage palette and added a dismiss link that hides it for the current user.
 
 = 2.10.0 =
 * Added a Site basics section to the settings screen that gathers the logo, the favicon, and the menus in one place, with the current state shown and a link straight to each control. The logo and favicon are stored by WordPress, so they stay in sync with the Customizer.

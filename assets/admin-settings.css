@@ -96,7 +96,7 @@ html:has(body.appearance_page_lc-header-footer-html) {
     box-shadow: 0 0 0 2px #7a9e87;
 }
 
-/* Secondary buttons (for example Create starter content): sage outline. */
+/* Secondary buttons: sage outline. */
 .lc-canvas-settings .button-secondary {
     color: #5c7f68;
     border-color: #7a9e87;
@@ -221,5 +221,148 @@ html:has(body.appearance_page_lc-header-footer-html) {
 .lc-canvas-settings .lc-basic__btn:hover,
 .lc-canvas-settings .lc-basic__btn:focus {
     background: #5C7F68;
+    color: #fff;
+}
+
+/* ---- Example helper (loads a sample header, footer, and page draft) ---- */
+
+.lc-canvas-settings .lc-example-helper {
+    max-width: 720px;
+    margin: 16px 0 8px;
+    padding: 16px 20px;
+    background: #f5f7f5;
+    border: 1px solid #d5ded6;
+    border-left: 3px solid #7a9e87;
+    border-radius: 6px;
+}
+
+.lc-canvas-settings .lc-example-helper__text {
+    margin: 0 0 10px;
+    max-width: 640px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #4a5e52;
+}
+
+.lc-canvas-settings .lc-example-helper__text:last-of-type {
+    margin-bottom: 14px;
+}
+
+.lc-canvas-settings .lc-example-helper__text a {
+    color: #5c7f68;
+    text-decoration: underline;
+}
+
+.lc-canvas-settings .lc-example-helper__text a:hover,
+.lc-canvas-settings .lc-example-helper__text a:focus {
+    color: #1a2420;
+}
+
+.lc-canvas-settings .lc-example-helper__actions {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.lc-canvas-settings .lc-example-helper__btn {
+    display: inline-block;
+    background: #7a9e87;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    padding: 9px 18px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.lc-canvas-settings .lc-example-helper__btn:hover,
+.lc-canvas-settings .lc-example-helper__btn:focus {
+    background: #5c7f68;
+    color: #fff;
+}
+
+.lc-canvas-settings .lc-example-helper__dismiss {
+    font-size: 13px;
+    color: #7a9087;
+    text-decoration: none;
+}
+
+.lc-canvas-settings .lc-example-helper__dismiss:hover,
+.lc-canvas-settings .lc-example-helper__dismiss:focus {
+    color: #5c7f68;
+    text-decoration: underline;
+}
+
+/* ---- Starter Kit and Pro panel ---- */
+
+.lc-canvas-settings .lc-pro-panel {
+    max-width: 720px;
+    margin-top: 20px;
+    background: #fff;
+    border: 1px solid #d5ded6;
+    border-radius: 6px;
+    padding: 22px 26px;
+}
+
+.lc-canvas-settings .lc-pro-panel .lc-pro-eyebrow {
+    margin: 0 0 20px;
+    font-family: "Source Code Pro", Menlo, Consolas, monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: #5c7f68;
+}
+
+.lc-canvas-settings .lc-pro-panel .lc-pro-eyebrow .lc-pro-tag-bracket {
+    color: rgba(122, 158, 135, 0.6);
+}
+
+.lc-canvas-settings .lc-pro-panel .lc-pro-title {
+    margin: 0 0 12px;
+    padding: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    font-size: 22px;
+    color: #1a2420;
+}
+
+.lc-canvas-settings .lc-pro-panel p.lc-pro-text {
+    margin: 0 0 12px;
+    max-width: 620px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #4a5e52;
+}
+
+.lc-canvas-settings .lc-pro-panel p.lc-pro-text.is-last {
+    margin-bottom: 18px;
+}
+
+.lc-canvas-settings .lc-pro-panel p.lc-pro-text a {
+    color: #5c7f68;
+    text-decoration: underline;
+}
+
+.lc-canvas-settings .lc-pro-panel p.lc-pro-text a:hover,
+.lc-canvas-settings .lc-pro-panel p.lc-pro-text a:focus {
+    color: #1a2420;
+}
+
+.lc-canvas-settings .lc-pro-panel .lc-pro-cta {
+    display: inline-block;
+    background: #7a9e87;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    padding: 11px 22px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.lc-canvas-settings .lc-pro-panel .lc-pro-cta:hover,
+.lc-canvas-settings .lc-pro-panel .lc-pro-cta:focus {
+    background: #5c7f68;
     color: #fff;
 }
