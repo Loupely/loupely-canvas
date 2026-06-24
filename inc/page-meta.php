@@ -527,10 +527,28 @@ function lc_print_page_head_code(): void {
 	}
 	$code = (string) get_post_meta( $id, '_lc_page_head', true );
 	if ( trim( $code ) !== '' ) {
-		echo "\n" . $code . "\n";
+		echo "\n" . lc_tag_page_code_scripts( $code, $id ) . "\n";
 	}
 }
 add_action( 'wp_head', 'lc_print_page_head_code', 100 );
+
+/**
+ * Tag the inline scripts in a per page code box so a runtime error in one traces
+ * back to this page in the Canvas Pro error log. The tagging helper lives in
+ * Canvas Pro; when the plugin is absent the code prints untagged and an error
+ * from it is simply not attributed, which is the correct quiet fallback. The kind
+ * is page for a page or post and cpt for a custom post type item, so the log
+ * names the source correctly. Only a trailing source comment is added, so the
+ * passthrough output is unchanged.
+ */
+function lc_tag_page_code_scripts( string $code, int $id ): string {
+	if ( ! function_exists( 'lc_pro_tag_inline_scripts' ) ) {
+		return $code;
+	}
+	$type = get_post_type( $id );
+	$kind = ( $type === 'page' || $type === 'post' ) ? 'page' : 'cpt';
+	return lc_pro_tag_inline_scripts( $code, $id, $kind );
+}
 
 /**
  * Print the per page body-end code, after the site-wide Body end box.
@@ -542,7 +560,7 @@ function lc_print_page_body_end_code(): void {
 	}
 	$code = (string) get_post_meta( $id, '_lc_page_body_end', true );
 	if ( trim( $code ) !== '' ) {
-		echo "\n" . $code . "\n";
+		echo "\n" . lc_tag_page_code_scripts( $code, $id ) . "\n";
 	}
 }
 add_action( 'wp_footer', 'lc_print_page_body_end_code', 100 );

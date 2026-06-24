@@ -3,7 +3,7 @@ Contributors: loupely
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 2.25.0
+Stable tag: 2.27.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, full-width-template, translation-ready, custom-colors, editor-style
@@ -53,6 +53,12 @@ From Appearance, Loupely Canvas. A single page can override them under the Heade
 This full edition is distributed through GitHub and loupelycanvas.com. It includes a built in update checker that watches the project's GitHub releases, so update notices appear in wp-admin and you can update in one click. The Loupely Canvas Lite edition on WordPress.org updates through the directory instead.
 
 == Changelog ==
+
+= 2.27.0 =
+* A JavaScript error in the site-wide Head or Body code box is now traced back to the site-wide code in the Canvas Pro error log. The code prints exactly as before; only a source marker is added so an error can be attributed. With Canvas Pro absent the code prints unchanged and is simply not traced.
+
+= 2.26.0 =
+* A JavaScript error in a page's own head or body code box is now traced back to that page in the Canvas Pro error log, the same way injection, snippet, and set errors are. This covers pages, posts, and custom post type items. The code prints exactly as before; only a source marker is added so an error can be attributed. With Canvas Pro absent the code prints unchanged and is simply not traced.
 
 = 2.25.0 =
 * The site-wide SEO defaults, a fallback meta description and share image, the front-page Organization schema, and the Twitter site handle, now live in Theme Settings under the Activate SEO control, alongside the on and off switch and the per-page SEO. They show only while SEO is active and hide the moment it is switched off. These previously lived in the Canvas Pro menu.

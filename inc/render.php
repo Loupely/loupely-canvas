@@ -137,10 +137,26 @@ function lc_print_head_code(): void {
     }
     $code = get_option( 'lc_head_html', '' );
     if ( trim( (string) $code ) !== '' ) {
-        echo "\n" . $code . "\n";
+        echo "\n" . lc_tag_global_code_scripts( (string) $code ) . "\n";
     }
 }
 add_action( 'wp_head', 'lc_print_head_code', 99 );
+
+/**
+ * Tag the inline scripts in a site-wide code box so a runtime error in one traces
+ * back to the site-wide code in the Canvas Pro error log. Site-wide code has no
+ * post behind it, so it is tagged with the global kind and an id of zero, which
+ * the log resolves to the Theme Settings screen. The tagging helper lives in
+ * Canvas Pro; without the plugin the code prints untagged and an error from it is
+ * simply not attributed. Only a trailing source comment is added, so the
+ * passthrough output is unchanged.
+ */
+function lc_tag_global_code_scripts( string $code ): string {
+    if ( ! function_exists( 'lc_pro_tag_inline_scripts' ) ) {
+        return $code;
+    }
+    return lc_pro_tag_inline_scripts( $code, 0, 'global' );
+}
 
 
 function lc_print_body_end_code(): void {
@@ -149,7 +165,7 @@ function lc_print_body_end_code(): void {
     }
     $code = get_option( 'lc_body_end_html', '' );
     if ( trim( (string) $code ) !== '' ) {
-        echo "\n" . $code . "\n";
+        echo "\n" . lc_tag_global_code_scripts( (string) $code ) . "\n";
     }
 }
 add_action( 'wp_footer', 'lc_print_body_end_code', 99 );
