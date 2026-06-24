@@ -53,6 +53,12 @@ function lc_register_settings() {
         'sanitize_callback' => 'lc_sanitize_checkbox',
         'default'           => '1',
     ] );
+
+    register_setting( 'lc_html_settings', 'lc_seo_defaults', [
+        'type'              => 'array',
+        'sanitize_callback' => 'lc_sanitize_seo_defaults',
+        'default'           => [],
+    ] );
 }
 add_action( 'admin_init', 'lc_register_settings' );
 
@@ -136,6 +142,20 @@ function lc_enqueue_settings_assets( $hook ) {
         'copied' => __( 'Copied to clipboard', 'loupely-canvas' ),
         'copy'   => __( 'Copy', 'loupely-canvas' ),
     ] );
+
+    // The site-wide SEO defaults block uses the media library for its image
+    // fields and shows or hides with the SEO toggle, both handled by the SEO
+    // script, so load it and the media frame on this screen too.
+    wp_enqueue_media();
+    $seo_rel = '/assets/seo.js';
+    $seo_abs = get_template_directory() . $seo_rel;
+    wp_enqueue_script(
+        'lc-seo',
+        get_template_directory_uri() . $seo_rel,
+        [],
+        file_exists( $seo_abs ) ? (string) filemtime( $seo_abs ) : LC_VERSION,
+        true
+    );
 }
 add_action( 'admin_enqueue_scripts', 'lc_enqueue_settings_assets' );
 
@@ -359,6 +379,60 @@ function lc_render_settings_page() {
                 <input type="checkbox" name="lc_seo_enabled" value="1" <?php checked( get_option( 'lc_seo_enabled', '1' ), '1' ); ?>>
                 <?php echo esc_html__( 'Activate SEO features in Loupely Canvas', 'loupely-canvas' ); ?>
             </label>
+
+            <?php
+            $seo_on  = get_option( 'lc_seo_enabled', '1' ) === '1';
+            $seo     = lc_seo_defaults_get();
+            ?>
+            <div class="lc-seo-defaults" <?php echo $seo_on ? '' : 'hidden'; ?>>
+                <p style="max-width:680px;color:#664d03;background:#fff8e5;border:1px solid #f0e0a8;border-radius:6px;padding:10px 14px;margin-top:14px;">
+                    <?php echo esc_html__( 'If you run another SEO plugin such as Yoast or Rank Math, it prints these tags too. Use one or the other to avoid two sets of tags.', 'loupely-canvas' ); ?>
+                </p>
+                <p style="max-width:680px;color:#50575e;">
+                    <?php echo esc_html__( 'Site wide defaults and structured data. Each page, post, and custom post type sets its own SEO in the SEO section on the editor; these fill in where a page has not set its own.', 'loupely-canvas' ); ?>
+                </p>
+                <table class="form-table" role="presentation">
+                    <tr>
+                        <th scope="row"><?php echo esc_html__( 'Default meta description', 'loupely-canvas' ); ?></th>
+                        <td>
+                            <textarea name="lc_seo_defaults[default_description]" rows="2" class="large-text"><?php echo esc_textarea( $seo['default_description'] ); ?></textarea>
+                            <p class="description"><?php echo esc_html__( 'Used on pages that do not set their own description.', 'loupely-canvas' ); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?php echo esc_html__( 'Default social image', 'loupely-canvas' ); ?></th>
+                        <td>
+                            <input type="url" id="lc_seo_default_image" name="lc_seo_defaults[default_image]" value="<?php echo esc_attr( $seo['default_image'] ); ?>" class="regular-text">
+                            <button type="button" class="button lc-seo-pick-image" data-target="lc_seo_default_image"><?php echo esc_html__( 'Select', 'loupely-canvas' ); ?></button>
+                            <button type="button" class="button lc-seo-clear-image" data-target="lc_seo_default_image"><?php echo esc_html__( 'Clear', 'loupely-canvas' ); ?></button>
+                        </td>
+                    </tr>
+                    <tr><th colspan="2"><hr><h3 style="margin:8px 0;"><?php echo esc_html__( 'Organization schema (front page)', 'loupely-canvas' ); ?></h3></th></tr>
+                    <tr>
+                        <th scope="row"><?php echo esc_html__( 'Organization name', 'loupely-canvas' ); ?></th>
+                        <td><input type="text" name="lc_seo_defaults[org_name]" value="<?php echo esc_attr( $seo['org_name'] ); ?>" class="regular-text"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?php echo esc_html__( 'Logo URL', 'loupely-canvas' ); ?></th>
+                        <td>
+                            <input type="url" id="lc_seo_org_logo" name="lc_seo_defaults[org_logo]" value="<?php echo esc_attr( $seo['org_logo'] ); ?>" class="regular-text">
+                            <button type="button" class="button lc-seo-pick-image" data-target="lc_seo_org_logo"><?php echo esc_html__( 'Select', 'loupely-canvas' ); ?></button>
+                            <button type="button" class="button lc-seo-clear-image" data-target="lc_seo_org_logo"><?php echo esc_html__( 'Clear', 'loupely-canvas' ); ?></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?php echo esc_html__( 'Social profile URLs', 'loupely-canvas' ); ?></th>
+                        <td>
+                            <textarea name="lc_seo_defaults[org_sameas]" rows="3" class="large-text" placeholder="https://example.com/you"><?php echo esc_textarea( $seo['org_sameas'] ); ?></textarea>
+                            <p class="description"><?php echo esc_html__( 'One URL per line. Added to the Organization schema as sameAs.', 'loupely-canvas' ); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?php echo esc_html__( 'Twitter site handle', 'loupely-canvas' ); ?></th>
+                        <td><input type="text" name="lc_seo_defaults[twitter_site]" value="<?php echo esc_attr( $seo['twitter_site'] ); ?>" class="regular-text" placeholder="@yoursite"></td>
+                    </tr>
+                </table>
+            </div>
 
             <h3 style="margin-bottom:6px;margin-top:22px;"><?php echo esc_html__( 'Find and replace bar', 'loupely-canvas' ); ?></h3>
             <p style="max-width:680px;color:#50575e;margin-top:0;">

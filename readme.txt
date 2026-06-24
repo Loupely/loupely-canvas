@@ -3,7 +3,7 @@ Contributors: loupely
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.0
-Stable tag: 2.24.1
+Stable tag: 2.25.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: one-column, full-width-template, translation-ready, custom-colors, editor-style
@@ -53,6 +53,9 @@ From Appearance, Loupely Canvas. A single page can override them under the Heade
 This full edition is distributed through GitHub and loupelycanvas.com. It includes a built in update checker that watches the project's GitHub releases, so update notices appear in wp-admin and you can update in one click. The Loupely Canvas Lite edition on WordPress.org updates through the directory instead.
 
 == Changelog ==
+
+= 2.25.0 =
+* The site-wide SEO defaults, a fallback meta description and share image, the front-page Organization schema, and the Twitter site handle, now live in Theme Settings under the Activate SEO control, alongside the on and off switch and the per-page SEO. They show only while SEO is active and hide the moment it is switched off. These previously lived in the Canvas Pro menu.
 
 = 2.24.1 =
 * The SEO switch now reads Activate SEO features in Loupely Canvas, and turning it off also hides the SEO fields from the editor on pages, posts, and custom post types, not only the front end output. Saved SEO values are kept. Removed the SEO link from the settings jump bar so it spans the full width again; the SEO controls still live under Theme Settings.

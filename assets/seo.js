@@ -47,7 +47,7 @@
 	// --- Media picker ---
 
 	function targetInput( wrap, button ) {
-		var byClass = wrap.querySelector( '.lc-seo-image' );
+		var byClass = wrap ? wrap.querySelector( '.lc-seo-image' ) : null;
 		if ( byClass ) {
 			return byClass;
 		}
@@ -298,9 +298,26 @@
 		}
 	} );
 
+	function initSeoDefaultsToggle() {
+		var block = document.querySelector( '.lc-seo-defaults' );
+		if ( ! block ) {
+			return;
+		}
+		var toggle = document.querySelector( 'input[type="checkbox"][name="lc_seo_enabled"]' );
+		if ( ! toggle ) {
+			return;
+		}
+		var sync = function () {
+			block.hidden = ! toggle.checked;
+		};
+		toggle.addEventListener( 'change', sync );
+		sync();
+	}
+
 	function init() {
 		var sections = document.querySelectorAll( '.lc-seo' );
 		Array.prototype.forEach.call( sections, initCounters );
+		initSeoDefaultsToggle();
 	}
 
 	if ( document.readyState === 'loading' ) {

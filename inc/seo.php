@@ -420,6 +420,94 @@ function lc_seo_output_enabled_option( $enabled ) {
 }
 add_filter( 'lc_seo_output_enabled', 'lc_seo_output_enabled_option' );
 
+
+// ===========================================================
+// SITE-WIDE SEO DEFAULTS
+//
+// A fallback meta description, a fallback share image, an Organization schema
+// for the front page, and a Twitter site handle. These fill in where a page has
+// not set its own. They are edited in the SEO section of Theme Settings and feed
+// the SEO output below through the same filters the output already reads, so the
+// defaults and the schema appear without a separate output path.
+// ===========================================================
+
+/** The site-wide SEO defaults, parsed against their keys. */
+function lc_seo_defaults_get(): array {
+	return wp_parse_args( get_option( 'lc_seo_defaults', [] ), [
+		'default_description' => '',
+		'default_image'       => '',
+		'org_name'            => '',
+		'org_logo'            => '',
+		'org_sameas'          => '',
+		'twitter_site'        => '',
+	] );
+}
+
+/** Sanitize the site-wide SEO defaults on save. */
+function lc_sanitize_seo_defaults( $input ): array {
+	$in = is_array( $input ) ? $input : [];
+	return [
+		'default_description' => isset( $in['default_description'] ) ? sanitize_textarea_field( $in['default_description'] ) : '',
+		'default_image'       => isset( $in['default_image'] ) ? esc_url_raw( $in['default_image'] ) : '',
+		'org_name'            => isset( $in['org_name'] ) ? sanitize_text_field( $in['org_name'] ) : '',
+		'org_logo'            => isset( $in['org_logo'] ) ? esc_url_raw( $in['org_logo'] ) : '',
+		'org_sameas'          => isset( $in['org_sameas'] ) ? sanitize_textarea_field( $in['org_sameas'] ) : '',
+		'twitter_site'        => isset( $in['twitter_site'] ) ? sanitize_text_field( $in['twitter_site'] ) : '',
+	];
+}
+
+function lc_seo_feed_default_description( $value ) {
+	$o = lc_seo_defaults_get();
+	return $o['default_description'] !== '' ? $o['default_description'] : $value;
+}
+add_filter( 'lc_seo_default_description', 'lc_seo_feed_default_description' );
+
+function lc_seo_feed_default_image( $value ) {
+	$o = lc_seo_defaults_get();
+	return $o['default_image'] !== '' ? $o['default_image'] : $value;
+}
+add_filter( 'lc_seo_default_image', 'lc_seo_feed_default_image' );
+
+function lc_seo_feed_twitter_site( $value ) {
+	$o = lc_seo_defaults_get();
+	return $o['twitter_site'] !== '' ? $o['twitter_site'] : $value;
+}
+add_filter( 'lc_seo_twitter_site', 'lc_seo_feed_twitter_site' );
+
+/**
+ * Add the Organization schema on the front page as one more block in the list
+ * the head function prints.
+ */
+function lc_seo_feed_org_schema( $schemas ) {
+	$schemas = is_array( $schemas ) ? $schemas : [];
+	if ( ! is_front_page() ) {
+		return $schemas;
+	}
+	$o = lc_seo_defaults_get();
+	if ( $o['org_name'] === '' ) {
+		return $schemas;
+	}
+	$org = [
+		'@context' => 'https://schema.org',
+		'@type'    => 'Organization',
+		'name'     => $o['org_name'],
+		'url'      => home_url( '/' ),
+	];
+	if ( $o['org_logo'] !== '' ) {
+		$org['logo'] = $o['org_logo'];
+	}
+	if ( $o['org_sameas'] !== '' ) {
+		$same = array_values( array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $o['org_sameas'] ) ) ) );
+		if ( $same ) {
+			$org['sameAs'] = $same;
+		}
+	}
+	$schemas[] = $org;
+	return $schemas;
+}
+add_filter( 'lc_seo_extra_schemas', 'lc_seo_feed_org_schema' );
+
+
 function lc_seo_head(): void {
 	if ( is_admin() || ! apply_filters( 'lc_seo_output_enabled', true ) ) {
 		return;
